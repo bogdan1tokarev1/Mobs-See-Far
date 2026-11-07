@@ -1,0 +1,70 @@
+# Запись в реестре для Mobs See Far — шаблон.
+#
+# Такую запись создаёт форма playhorizon.dev/mods/submit (она открывает PR в
+# horizon-rust/horizon-mods и кладёт этот файл как mods/mobs_see_far.toml).
+# Здесь всё заполнено, кроме того, что зависит от вашего GitHub:
+#   — source:    ссылка на ВАШ публичный репозиторий с этим кодом;
+#   — owners:    ваш GitHub-логин (форма ставит его сама при входе через GitHub);
+#   — owner_ids: числовой id GitHub (форма подставляет сама; если заполняете руками,
+#                его видно на https://api.github.com/users/<логин>).
+#
+# Поля api / side / capabilities / hooks / broken_on руками не пишутся: CI читает
+# их из файла .hnmod (у нас "hooks": 146).
+
+id = "mobs_see_far"
+kind = "native-mod"
+name = "Mobs See Far"
+summary = "Hostile mobs see the player from 128 blocks instead of the 16 to 35 the game gives them."
+description = """
+Hostile mobs notice you from far away: **128 blocks**, not the 35 a zombie has and the 16 a skeleton
+has.
+
+| Mob | The game's own sight | With Mobs See Far |
+| --- | --- | --- |
+| zombie, husk, drowned | 35 blocks | **128 blocks** |
+| skeleton, spider, creeper, enderman, witch, slime, pillager | 16 blocks | **128 blocks** |
+| warden | 24 blocks | **128 blocks** |
+
+The sight distance is the mob's `follow_range` attribute, which every targeting goal in the game
+reads, so the whole chain grows with it: noticing the player, targeting them, and how long a path the
+mob is willing to find to reach them.
+
+- **Only hostile mobs** — the game's monster category. Animals, villagers, golems and the player keep
+  the sight the game gave them.
+- **Nothing else changes**: same speed, damage, drops, spawning, despawning and behaviour. 128 is
+  deliberately the game's own despawn distance, so no other rule of the game has to be touched.
+- **Off means off.** The switch in **Options > Mods** puts each mob's own sight back on its next tick,
+  in the same world, without a restart.
+- It runs **server-side** (single player, and the server thread of a LAN world), so every player in
+  the world is seen from as far.
+- **`/mobsseefar`** (or `/msf`) in chat says what the mod is doing.
+
+Nothing has to be configured: Horizon's simulation distance (12 chunks, 192 blocks, by default) already
+covers the whole range, as does a dedicated server's default of 10 chunks.
+
+It adds no blocks, items or assets and keeps no settings files.
+
+By Bogdan_Tokarev. MIT.
+"""
+authors = ["Bogdan_Tokarev"]
+owners = ["<ваш-github-логин>"]
+owner_ids = [0] # <- числовой GitHub id вашего аккаунта (форма заполнит сама)
+license = "MIT"
+source = "https://github.com/<ваш-логин>/mobs-see-far"
+icon = "icons/mobs_see_far.png"
+categories = ["game-mechanics", "adventure"]
+tags = ["mobs", "ai", "hostile", "difficulty", "detection", "monsters"]
+
+[[versions]]
+version = "1.0.0"
+published = "2026-11-07"
+game = "26.3"
+file = "mobs_see_far-1.0.0.hnmod"
+sha256 = "81714b7d1ce0f31641ad1a0971fbc96531f9dde8347e8f82c967b3c543b8b5ad"
+changelog = """
+First release. Every hostile mob's follow range becomes 128 blocks (the game gives them 16 to 35) and
+its pathfinder budget grows with it the way the game scales it. 128 is the game's own despawn
+distance, so spawning, despawning and everything else stay exactly as the game has them. Turning the
+mod off in Options > Mods puts each mob's own range back on its next tick. `/mobsseefar` reports the
+state.
+"""

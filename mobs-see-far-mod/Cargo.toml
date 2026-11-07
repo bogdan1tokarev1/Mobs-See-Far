@@ -1,0 +1,12 @@
+[package]
+name = "horizon-mod-mobs-see-far"
+version = "1.0.0"
+edition = "2024"
+license = "MIT"
+publish = false
+authors = ["Bogdan_Tokarev"]
+description = "Mobs See Far, a native mod for Horizon: hostile mobs see the player from 128 blocks away. By Bogdan_Tokarev."
+
+# The mod's logic and its tests: the same file the bundle adds to the game.
+[lib]
+path = "mixins/mobs_see_far/runtime.rs"
